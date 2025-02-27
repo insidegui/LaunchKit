@@ -29,11 +29,17 @@
 
 #include <sys/sysctl.h>
 
+#import <TargetConditionals.h>
+
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
 #include <inttypes.h>
-#include <libproc.h>
+#if TARGET_OS_IOS
+    #include "libproc.h"
+#else
+    #include <libproc.h>
+#endif
 #include <mach/mach_traps.h>
 #include <signal.h>
 #include <spawn.h>
@@ -48,7 +54,11 @@ const char *mach_host_special_port_description(int port);
 const char *mach_task_special_port_description(int port);
 /* END <mach/mach/port_descriptions.h> */
 
-#include <sys/proc_info.h>
+#if TARGET_OS_IOS
+    #include "proc_info.h"
+#else
+    #include <sys/proc_info.h>
+#endif
 
 /* #define PRIVATE
    #include <sys/proc_info_private.h> */
