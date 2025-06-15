@@ -67,7 +67,7 @@ XPC_EXPORT XPC_WARN_RESULT XPC_NONNULL1 XPC_NONNULL3 XPC_NONNULL4 int _xpc_pipe_
     uint64_t routine, xpc_object_t message, xpc_object_t XPC_GIVES_REFERENCE *reply, uint64_t flags)
     __API_AVAILABLE(ios(15.0));
 
-int launch_active_user_switch(long, long) __API_AVAILABLE(ios(15.0));
+//int launch_active_user_switch(long, long) __API_AVAILABLE(ios(15.0));
 
 int64_t xpc_user_sessions_enabled(void) __API_AVAILABLE(ios(16.0));
 uint64_t xpc_user_sessions_get_foreground_uid(uint64_t) __API_AVAILABLE(ios(16.0));

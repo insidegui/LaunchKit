@@ -36,23 +36,25 @@
 int
 userswitch_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple)
 {
-	if (argc != 3)
-		return EUSAGE;
-
-	int ret = ENOTSUP;
-
-	if (__builtin_available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)) {
-		long olduid = 0, newuid = 0;
-
-		olduid = strtol(argv[1], NULL, 0);
-		newuid = strtol(argv[1], NULL, 0);
-
-		ret = launch_active_user_switch(olduid, newuid);
-	}
-
-	if (ret != 0) {
-		fprintf(stderr, "Failed to perform a user switch: %d: %s\n", ret, xpc_strerror(ret));
-	}
-
-	return ret;
+    fprintf(stderr, "This command is no longer available.\n");
+    return EPROCUNAVAIL;
+//	if (argc != 3)
+//		return EUSAGE;
+//
+//	int ret = ENOTSUP;
+//
+//	if (__builtin_available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)) {
+//		long olduid = 0, newuid = 0;
+//
+//		olduid = strtol(argv[1], NULL, 0);
+//		newuid = strtol(argv[1], NULL, 0);
+//
+//		ret = launch_active_user_switch(olduid, newuid);
+//	}
+//
+//	if (ret != 0) {
+//		fprintf(stderr, "Failed to perform a user switch: %d: %s\n", ret, xpc_strerror(ret));
+//	}
+//
+//	return ret;
 }
