@@ -11,6 +11,10 @@ let package = Package(
             name: "LaunchKit",
             targets: ["LaunchKit"]
         ),
+        .library(
+            name: "CLaunchKit",
+            targets: ["CLaunchKit"]
+        ),
     ],
     targets: [
         .target(name: "CLaunchKit"),
