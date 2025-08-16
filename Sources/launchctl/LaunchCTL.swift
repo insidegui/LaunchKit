@@ -15,6 +15,6 @@ struct LaunchCTL {
     static func test() throws {
         fputs("Testing...\n", stderr)
 
-        // TBD
+        try LaunchControl.invoke("list")
     }
 }
