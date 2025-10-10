@@ -45,9 +45,13 @@ public extension LaunchControl.Error {
 
 public extension LaunchControl {
     static func invoke(_ args: String...) throws {
+        try invoke(arguments: args)
+    }
+
+    static func invoke(arguments: [String]) throws {
         try LaunchControl.Error.wrap {
             /// `launchctl_invoke` requires the first argument to be the "name of the command".
-            let argv: [String] = ["launchctl"] + args
+            let argv: [String] = ["launchctl"] + arguments
 
             /// Build a C-compatible argv array, ensuring it's null-terminated.
             var cArgv = argv.map { strdup($0) }
