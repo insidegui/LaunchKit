@@ -15,6 +15,10 @@ let package = Package(
             name: "CLaunchKit",
             targets: ["CLaunchKit"]
         ),
+        .executable(
+            name: "launchctl",
+            targets: ["launchctl"]
+        ),
     ],
     targets: [
         .target(name: "CLaunchKit"),
