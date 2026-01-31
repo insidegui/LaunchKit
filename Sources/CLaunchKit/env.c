@@ -77,7 +77,7 @@ setenv_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple)
 }
 
 int
-getenv_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple)
+getenv_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple, char **response)
 {
 	if (argc < 2)
 		return EUSAGE;
@@ -94,7 +94,11 @@ getenv_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple)
 		val = xpc_dictionary_get_string(reply, "value");
 		if (val == NULL)
 			return EBADRESP;
-		printf("%s\n", val);
+        if (response) {
+            *response = (char *)val;
+        } else {
+            printf("%s\n", val);
+        }
 	}
 
 	return 0;

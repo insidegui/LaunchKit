@@ -34,6 +34,7 @@
 #define _LAUNCHCTL_H_
 
 typedef int cmd_main(xpc_object_t *, int, char **, char **, char **);
+typedef int cmd_main_with_response(xpc_object_t *, int, char **, char **, char **, char **);
 
 // launchctl.c
 cmd_main help_cmd;
@@ -63,7 +64,7 @@ cmd_main dumpstate_cmd;
 
 // env.c
 cmd_main setenv_cmd;
-cmd_main getenv_cmd;
+cmd_main_with_response getenv_cmd;
 
 // load.c
 cmd_main load_cmd;
@@ -133,5 +134,5 @@ vm_address_t launchctl_create_shmem(xpc_object_t, vm_size_t);
 void launchctl_print_shmem(xpc_object_t dict, vm_address_t addr, vm_size_t sz, FILE *outfd);
 xpc_object_t launchctl_xpc_from_plist(const char *path);
 
-int launchctl_invoke(int argc, char **argv, char **envp, char **apple);
+int launchctl_invoke(int argc, char **argv, char **envp, char **apple, char **output);
 #endif

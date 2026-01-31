@@ -55,7 +55,12 @@ static const struct {
 	const char *name;
 	const char *description;
 	const char *usage;
-	cmd_main *exec;
+    union {
+        void *_raw;
+        cmd_main *exec;
+        cmd_main_with_response *exec_with_response;
+    };
+    uint8_t response;
 } cmds[] = {
 	{ "bootstrap", "Bootstraps a domain or a service into a domain.", "<domain-target> [service-path, service-path2, ...]", bootstrap_cmd },
 	{ "bootout", "Tears down a domain or removes a service from a domain.", "<domain-target> [service-path1, service-path2, ...] | <service-target>", bootout_cmd },
@@ -90,7 +95,7 @@ static const struct {
 	{ "stop", "Stops the specified service if it is running.", "<service-name>", stop_cmd },
 	{ "setenv", "Sets the specified environment variables for all services within the domain.", "<<key> <value>, ...>", setenv_cmd },
 	{ "unsetenv", "Unsets the specified environment variables for all services within the domain.", "<key, ...>", setenv_cmd },
-	{ "getenv", "Gets the value of an environment variable from within launchd.", "<key>", getenv_cmd },
+	{ "getenv", "Gets the value of an environment variable from within launchd.", "<key>", getenv_cmd, 1 },
 	{ "bsexec", "Execute a program in another process' bootstrap context.", "<pid> <program> [...]", todo_cmd },
 	{ "asuser", "Execute a program in the bootstrap context of a given user.", "<uid> <program> [...]", todo_cmd },
 	{ "submit", "Submit a basic job from the command line.", "-l <label> [-p <program>] [-o <stdout-path>] [-e <stderr-path] -- <command> [arg0, arg1, ...]", submit_cmd },
@@ -105,7 +110,7 @@ static const struct {
 // clang-format on
 
 int
-launchctl_invoke(int argc, char **argv, char **envp, char **apple)
+launchctl_invoke(int argc, char **argv, char **envp, char **apple, char **output)
 {
 	xpc_object_t msg;
 	const char *name = NULL;
@@ -118,8 +123,12 @@ launchctl_invoke(int argc, char **argv, char **envp, char **apple)
 	int n = sizeof(cmds) / sizeof(cmds[0]);
 	for (int i = 0; i < n; i++) {
 		if (strcmp(argv[1], cmds[i].name) == 0) {
-			ret = (cmds[i].exec)(&msg, argc - 1, argv + 1, envp, apple);
-			goto finish;
+            if (cmds[i].response) {
+                ret = (cmds[i].exec_with_response)(&msg, argc - 1, argv + 1, envp, apple, output);
+            } else {
+                ret = (cmds[i].exec)(&msg, argc - 1, argv + 1, envp, apple);
+            }
+            goto finish;
 		}
 	}
 	fprintf(stderr, "Unrecognized subcommand: %s\n", argv[1]);
