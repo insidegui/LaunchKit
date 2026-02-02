@@ -1,3 +1,5 @@
+> Disclaimer: this project is provided for use within the [Apple Security Research Device Program](https://security.apple.com/research-device/), use for any purpose outside of security research is outside the scope of the project, please don't report issues or request features that are not within that scope.
+
 # LaunchKit: launchctl as a Swift package
 
 Based on [launchctl](https://github.com/ProcursusTeam/launchctl).
