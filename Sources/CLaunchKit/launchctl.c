@@ -244,3 +244,12 @@ todo_cmd(xpc_object_t *msg, int argc, char **argv, char **envp, char **apple)
 {
 	return ENOTSUP;
 }
+
+uint64_t launchctl_get_foreground_uid(void)
+{
+    if (xpc_user_sessions_enabled()) {
+        return xpc_user_sessions_get_foreground_uid(0);
+    } else {
+        return 0;
+    }
+}

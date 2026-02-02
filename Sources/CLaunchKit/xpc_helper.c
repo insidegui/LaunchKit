@@ -127,7 +127,8 @@ launchctl_setup_xpc_dict(xpc_object_t dict)
 	} else {
 		xpc_dictionary_set_uint64(dict, "type", 1);
 	}
-	xpc_dictionary_set_uint64(dict, "handle", 0);
+    uint64_t handle = _launchctl_resolve_domain_handle();
+	xpc_dictionary_set_uint64(dict, "handle", handle);
 	return;
 }
 

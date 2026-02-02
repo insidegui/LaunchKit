@@ -33,6 +33,41 @@
 #ifndef _LAUNCHCTL_H_
 #define _LAUNCHCTL_H_
 
+#if __OBJC__
+
+#import <Foundation/Foundation.h>
+
+/// The launchctl domain that operations are applied to.
+typedef NS_ENUM(NSUInteger, LaunchCTLDomain) {
+    /// The system domain (root).
+    LaunchCTLDomainSystem,
+    /// The foreground user domain (typically mobile).
+    LaunchCTLDomainUser,
+};
+
+NS_ASSUME_NONNULL_BEGIN
+
+/// Switches the domain that all operations are applied to.
+void launchctl_set_domain(LaunchCTLDomain domain);
+
+/// The domain currently set via `launchctl_set_domain`.
+LaunchCTLDomain launchctl_get_domain(void);
+
+/// Create a scope for running one or more `launchctl` operations on the specified domain.
+///
+/// The global domain is restored to its previous value after the operations are completed.
+void withLaunchCTLDomain(LaunchCTLDomain domain, void(^block)(void) NS_NOESCAPE);
+
+NS_ASSUME_NONNULL_END
+
+#endif
+
+/// Resolves the `handle` value for running operations in the current domain.
+uint64_t _launchctl_resolve_domain_handle(void);
+
+/// Returns the uid for the foreground user if user sessions are enabled.
+uint64_t launchctl_get_foreground_uid(void);
+
 typedef int cmd_main(xpc_object_t *, int, char **, char **, char **);
 typedef int cmd_main_with_response(xpc_object_t *, int, char **, char **, char **, char **);
 

@@ -1,5 +1,6 @@
 import Foundation
 import OSLog
+import CLaunchKit
 
 /// Helper for reading and writing environment variables configured via `launchctl setenv`.
 public struct LaunchEnvironment: CustomStringConvertible {
@@ -28,26 +29,30 @@ public struct LaunchEnvironment: CustomStringConvertible {
         }
     }
 
+    private let domain: LaunchCTLDomain
     private var keys: Set<String>
     private var dictionary: [String: Value]
     
     /// Creates an environment by reading from `launchd`.
     /// - Parameter keys: The environment keys that should be tracked by this environment.
-    public init(_ keys: Set<String> = LaunchEnvironment.defaultKeys) {
+    public init(domain: LaunchCTLDomain = .user, _ keys: Set<String> = LaunchEnvironment.defaultKeys) {
+        self.domain = domain
         self.keys = keys
         self.dictionary = [:]
 
         dictionary.reserveCapacity(Self.defaultKeys.count)
 
-        for key in keys {
-            do {
-                let value = try LaunchControl.invoke("getenv", key)
+        withLaunchCTLDomain(domain) {
+            for key in keys {
+                do {
+                    let value = try LaunchControl.invoke("getenv", key)
 
-                dictionary[key] = .set(value)
-            } catch {
-                logger.error("Error initializing environment variable \(key, privacy: .public) from launchd state: \(error, privacy: .public)")
+                    dictionary[key] = .set(value)
+                } catch {
+                    logger.error("Error initializing environment variable \(key, privacy: .public) from launchd state: \(error, privacy: .public)")
 
-                dictionary[key] = .unset
+                    dictionary[key] = .unset
+                }
             }
         }
     }
@@ -59,16 +64,18 @@ public struct LaunchEnvironment: CustomStringConvertible {
 
     /// Writes all environment variables tracked by this environment.
     public func write() {
-        for (key, state) in dictionary {
-            do {
-                switch state {
-                case .set(let value):
-                    try LaunchControl.invoke("setenv", key, value)
-                case .unset:
-                    try LaunchControl.invoke("unsetenv", key)
+        withLaunchCTLDomain(domain) {
+            for (key, state) in dictionary {
+                do {
+                    switch state {
+                    case .set(let value):
+                        try LaunchControl.invoke("setenv", key, value)
+                    case .unset:
+                        try LaunchControl.invoke("unsetenv", key)
+                    }
+                } catch {
+                    logger.error("Error writing environment variable \(key, privacy: .public) with state \(state): \(error, privacy: .public)")
                 }
-            } catch {
-                logger.error("Error writing environment variable \(key, privacy: .public) with state \(state): \(error, privacy: .public)")
             }
         }
     }

@@ -1,5 +1,6 @@
 import Foundation
 import LaunchKit
+import CLaunchKit
 
 @main
 struct LaunchCTL {
@@ -19,6 +20,9 @@ struct LaunchCTL {
 extension LaunchCTL {
     static func test() throws {
         fputs("Testing...\n", stderr)
+
+        let fgUID = launchctl_get_foreground_uid();
+        print("Foreground uid: \(fgUID)")
 
         testLaunchEnvironment()
     }
