@@ -53,11 +53,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "load"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/System/Library/LaunchAgents/com.apple.controlcenter.plist"
+            argument = "list"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

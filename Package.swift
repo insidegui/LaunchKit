@@ -15,6 +15,10 @@ let package = Package(
             name: "CLaunchKit",
             targets: ["CLaunchKit"]
         ),
+        .library(
+            name: "LaunchKitLite",
+            targets: ["LaunchKitLite"]
+        ),
         .executable(
             name: "launchctl",
             targets: ["launchctl"]
@@ -23,6 +27,7 @@ let package = Package(
     targets: [
         .target(name: "CLaunchKit"),
         .target(name: "LaunchKit", dependencies: [.target(name: "CLaunchKit")]),
-        .executableTarget(name: "launchctl", dependencies: [.target(name: "LaunchKit")])
+        .executableTarget(name: "launchctl", dependencies: [.target(name: "LaunchKit")]),
+        .target(name: "LaunchKitLite"),
     ]
 )
