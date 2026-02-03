@@ -45,8 +45,6 @@ typedef NS_ENUM(NSUInteger, LaunchCTLDomain) {
     LaunchCTLDomainUser,
 };
 
-NS_ASSUME_NONNULL_BEGIN
-
 /// Switches the domain that all operations are applied to.
 void launchctl_set_domain(LaunchCTLDomain domain);
 
@@ -57,8 +55,6 @@ LaunchCTLDomain launchctl_get_domain(void);
 ///
 /// The global domain is restored to its previous value after the operations are completed.
 void withLaunchCTLDomain(LaunchCTLDomain domain, void(^block)(void) NS_NOESCAPE);
-
-NS_ASSUME_NONNULL_END
 
 #endif
 
