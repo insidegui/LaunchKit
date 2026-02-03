@@ -25,6 +25,10 @@ Binaries that need to perform `launchctl` operations on iOS should include the s
 <true/>
 <key>com.apple.private.xpc.service-configure</key>
 <true/>
+<key>com.apple.private.xpc.domain-extension</key>
+<true/>
+<key>com.apple.private.xpc.launchd.app-server</key>
+<true/>
 ```
 
-These are defined in `iOS/launchctl_srd/launchctl_srd/launchctl_srd.entitlements`. Depending on the exact operations you perform, a subset may be sufficient.
+These are defined in `iOS/launchctl_srd/launchctl_srd/launchctl_srd.entitlements`. Depending on the exact operations you perform, a subset may be sufficient. For example, the `com.apple.private.xpc.launchd.app-server` entitlement is only needed for the `setenv` command.
